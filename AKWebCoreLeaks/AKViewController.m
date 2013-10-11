@@ -33,11 +33,8 @@
     
     return rectWebView;
 }
-- (void)removeSubviews {
-    [self.view.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-}
 - (void)presentViews {
-    [self removeSubviews];
+    [self.view.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
 
     self.webView.frame = [self makeRectForWebView];
     [self.view addSubview:self.webView];
