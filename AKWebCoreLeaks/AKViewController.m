@@ -10,20 +10,71 @@
 
 @interface AKViewController ()
 
+@property (nonatomic, strong, readonly) UIWebView *webView;
+
 @end
 
 @implementation AKViewController
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+@synthesize webView = _webView;
+
+#define MARGIN_WEB_VIEW_X 15.0f
+#define MARGIN_WEB_VIEW_TOP 30.0f
+#define MARGIN_WEB_VIEW_BOTTOM 25.0f
+#define SHIFT_WEBVIEW 2.0f
+
+#pragma mark - Private methods
+
+- (CGRect)makeRectForWebView {
+    CGRect appFrame = UIScreen.mainScreen.applicationFrame;
+    CGRect rectWebView = CGRectMake(MARGIN_WEB_VIEW_X,
+                                    MARGIN_WEB_VIEW_TOP,
+                                    appFrame.size.width - MARGIN_WEB_VIEW_X * 2,
+                                    appFrame.size.height - MARGIN_WEB_VIEW_BOTTOM);
+    
+    return rectWebView;
+}
+- (void)removeSubviews {
+    [self.view.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+}
+- (void)presentViews {
+    [self removeSubviews];
+
+    self.webView.frame = [self makeRectForWebView];
+    [self.view addSubview:self.webView];
+}
+- (NSURLRequest *)makeLoginURLRequest {
+    NSString *stringUrl = @"http://google.com/";
+    NSURL *url = [NSURL URLWithString:[stringUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
+    return request;
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+#pragma mark - Properties
+
+- (UIWebView *)webView {
+    if (!_webView) {
+        _webView = [[UIWebView alloc] initWithFrame:UIScreen.mainScreen.applicationFrame];
+        _webView.scalesPageToFit = YES;
+    }
+    
+    return _webView;
+}
+
+#pragma mark - Lifecycle
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    [self presentViews];
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    self.view.backgroundColor = [UIColor grayColor];
+    [self.webView loadRequest:[self makeLoginURLRequest]];
 }
 
 @end
