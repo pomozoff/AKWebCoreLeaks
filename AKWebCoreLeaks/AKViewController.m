@@ -21,7 +21,6 @@
 #define MARGIN_WEB_VIEW_X 15.0f
 #define MARGIN_WEB_VIEW_TOP 30.0f
 #define MARGIN_WEB_VIEW_BOTTOM 25.0f
-#define SHIFT_WEBVIEW 2.0f
 
 #pragma mark - Private methods
 
